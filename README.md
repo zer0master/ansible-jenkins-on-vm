@@ -13,7 +13,8 @@ ansible_become_pass: (remote ansible user password)
 ansible_ssh_pass: (same as ansible_become_pass)
 certhost_ssh_pass: (password for host renewing certs)
 ```
-
-Agent spinup may be addressed later once I get task tags better sorted out; the Makefile already allows it if a quoted comma-delimited form is supplied for TAGS (`--tags` is added if so).
+TODOs:
+* cert update is a placeholder in the Makefile,; it already is part of the `certupdate` `copy certs to target` task, which should be broken out appropriately
+* agent spinup may be addressed later once I get task tags better sorted out; the Makefile already allows it if a quoted comma-delimited form is supplied for TAGS (`--tags` is added if so).
 
 For the present, no warranty expressed or implied. ;)
