@@ -1,0 +1,43 @@
+---
+# not much here aside from basic install and /etc/environment
+- name: install
+  ansible.builtin.apt:
+    name: "{{ java_pkgs }}"
+    state: present
+  tags:
+    - java
+
+- name: get Java version
+  ansible.builtin.command:
+    argv:
+      - update-alternatives
+      - --query
+      - java
+  tags:
+    - java
+  register: upd_alt_result
+
+- name: grab value
+  ansible.builtin.set_fact:
+    java_version: "{{ upd_alt_result.stdout | from_yaml }}"
+    # works because "update-alternatives --query" returns key: value format
+  tags:
+    - java
+
+- name: check JAVA_HOME defined
+  # apparently use of "ansible.builtin." prefix throws "this task 'ansible.builtin.shell' has extra params,
+  # so drop it
+  shell: |
+    grep -c "^JAVA_HOME=" /etc/environment || true
+  register: test_java_home
+
+- name: set JAVA_HOME
+  ansible.builtin.lineinfile:
+    path: /etc/environment
+    backup: yes
+    line: JAVA_HOME="{{ java_version['Value'] }}"
+    insertafter: EOF
+  when: test_java_home.stdout == "0"
+  tags:
+    - java
+...

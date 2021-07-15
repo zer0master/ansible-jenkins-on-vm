@@ -1,0 +1,8 @@
+---
+- name: pull certs by fqdn
+  hosts: certhost
+  vars_files:
+    - vault
+  roles:
+    - certspull
+...

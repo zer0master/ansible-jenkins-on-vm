@@ -1,0 +1,35 @@
+---
+#NOTE: Ubuntu/Debian-specific !!
+- name: add Jenkins key
+  # apparently deprecated (but use for now)
+  ansible.builtin.apt_key:
+    url: https://pkg.jenkins.io/debian-stable/jenkins.io.key
+    state: present
+  tags:
+    - jenkins
+
+- name: add Jenkins repo
+  ansible.builtin.apt_repository:
+    repo: deb http://pkg.jenkins.io/debian-stable binary/
+    state: present
+  tags:
+    - jenkins
+
+- name: update cache and install Jenkins
+  ansible.builtin.apt:
+    update_cache: yes
+    name: jenkins
+    state: present
+  tags:
+    - jenkins
+
+- name: start Jenkins service
+  ansible.builtin.service:
+    name: jenkins
+    enabled: yes
+    state: started
+  tags:
+    - jenkins
+
+#TODO: may add pattern to service step dep. on how this behaves
+...

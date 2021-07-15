@@ -1,0 +1,4 @@
+*.swp
+.env
+vault
+roles/nginx/files/certs

@@ -1,0 +1,11 @@
+---
+- name: restart Jenkins
+  ansible.builtin.service:
+    name: jenkins
+    state: restarted
+
+- name: restart nginx
+  ansible.builtin.service:
+    name: nginx
+    state: restarted
+...

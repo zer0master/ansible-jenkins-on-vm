@@ -1,0 +1,17 @@
+---
+- hosts: jenkins
+  remote_user: root
+  vars:
+    ansible_become_pass: "{{ ansible_ssh_pass }}"
+  vars_files:
+    - vault
+    # not included in repo for obvious reasons; define/encrypt ansible_ssh_{user,pass} here if used
+    #  adapted from http://stackoverflow.com/questions/21870083/specify-sudo-password-for-ansible/35945394
+  become: yes
+  become_method: sudo
+
+  roles:
+    - java
+    - jenkins
+    - nginx
+    - certupdate

@@ -1,0 +1,10 @@
+---
+- name: update jenkins to listen only on localhost
+  ansible.builtin.replace:
+    path: /etc/default/jenkins
+    backup: yes
+    regexp: ^JENKINS_ARGS=".*"
+    replace: JENKINS_ARGS="--webroot=/var/cache/$NAME/war --httpPort=$HTTP_PORT --httpListenAddress=127.0.0.1"
+  notify:
+    - restart Jenkins
+...

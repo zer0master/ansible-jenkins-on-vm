@@ -1,0 +1,2 @@
+cert_user: tivan
+ansible_ssh_user: tivan

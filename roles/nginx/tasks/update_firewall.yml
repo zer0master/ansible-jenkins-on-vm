@@ -1,0 +1,16 @@
+---
+- name: update firewall for OpenSSH
+ #community.general.ufw must be included?
+  ufw:
+    rule: allow
+    name: OpenSSH
+
+- name: update firewall for nginx
+  ufw:
+    rule: allow
+    name: Nginx Full
+
+- name: start nginx
+  ufw:
+    state: enabled
+...

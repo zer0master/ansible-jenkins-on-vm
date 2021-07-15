@@ -1,0 +1,11 @@
+---
+- include_tasks: install_nginx.yml
+- include_tasks: update_firewall.yml
+- include_tasks: jenkins_listen_localhost.yml
+- include_tasks: set_nginx_revproxy.yml
+  vars:
+    template_file: subdomain_revproxy_none.j2
+- include_tasks: set_nginx_revproxy.yml
+  vars:
+    template_file: subdomain_revproxy_ssl.j2
+...
