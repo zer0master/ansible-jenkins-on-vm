@@ -10,8 +10,9 @@
   become: yes
   become_method: sudo
 
+  # certupdate done before nginx install due to config dependence; should be refined though
   roles:
     - java
     - jenkins
-    - nginx
     - certupdate
+    - nginx
