@@ -1,0 +1,8 @@
+---
+- name: certupdate
+  src: git+https://github.com/zer0master/ansible-certupdate-nginx.git
+  scm: git
+- name: revproxy
+  src: git+https://github.com/zer0master/ansible-nginx-revproxy.git
+  scm: git
+...

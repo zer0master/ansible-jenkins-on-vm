@@ -1,17 +1,15 @@
 ---
 - name: pull designated certs from host
   ansible.builtin.fetch:
-    src: "/home/{{ cert_user }}/certs/{{ server_fqdn }}/{{ item }}"
-    dest: "roles/nginx/files/certs/{{ server_fqdn }}/"
+   #src: "/home/{{ cert_user }}/certs/{{ server_fqdn }}/{{ item }}"
+   #dest: "roles/nginx/files/certs/{{ server_fqdn }}/"
+    src: "{{ src_prefix }}/{{ server_fqdn }}/{{ item }}"
+    dest: "{{ dest_prefix }}/{{ server_fqdn }}/"
     # destination folder(s) auto-created
     flat: yes
     fail_on_missing: yes
-  loop:
-    - cert.pem
-    - chain.pem
-    - fullchain.pem
-    - privkey.pem
-    # as created/renewed by certmgr.sh on knowhere
+  loop: "{{ cert_files }}"
+    # as created/renewed by certmgr.sh with certbot-dns-route53 and LetsEncrypt
   tags:
     - certspull
 ...

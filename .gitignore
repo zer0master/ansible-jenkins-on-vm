@@ -1,4 +1,5 @@
 *.swp
 .env
 vault
-roles/nginx/files/certs
+roles/revproxy
+roles/certupdate

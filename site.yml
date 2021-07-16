@@ -15,4 +15,4 @@
     - java
     - jenkins
     - certupdate
-    - nginx
+    - revproxy

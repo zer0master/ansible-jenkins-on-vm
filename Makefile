@@ -1,7 +1,6 @@
 # just can't escape it, can we?
 #
 
-#DRYRUN?=""
 VAULT_PASSWD_FILE := ~/.ssh/.vp
 
 ifdef TAGS
@@ -14,6 +13,10 @@ endif
 	update-certs
 
 
+# show available targets
+help:
+	@awk '/^[-a-z]+:/' Makefile | cut -f1 -d\  | sort
+
 # general "pull certs-as-is" based on FQDN setting
 pull-certs:
 	ansible-playbook \
@@ -23,7 +26,7 @@ pull-certs:
 		--extra-vars server_fqdn=${FQDN} \
 		pullcerts.yml
 
-setup-jenkins:
+setup-jenkins: pull-certs
 	ansible-playbook $(TAGOPT) \
 		-vv \
 		--inventory hosts.yml \
