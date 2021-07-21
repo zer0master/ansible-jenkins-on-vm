@@ -20,7 +20,7 @@ endif
 	setup-jenkins \
 	update-certs
 
-setup-jenkins: pull-certs
+jenkins-revproxy: install-role-deps pull-certs
 	ansible-playbook $(TAGOPT) \
 		-vv \
 		--inventory hosts.yml \
@@ -31,7 +31,10 @@ setup-jenkins: pull-certs
 help:
 	@awk '/^[-a-z]+:/' Makefile | cut -f1 -d\  | sort
 
-# general "pull certs-as-is" based on FQDN setting
+install-role-deps:
+	ansible-galaxy role install -vv --role-file requirements.yml --roles-path roles/
+
+#NOTE: recipe-specific condition (FQDN), as opposed to file-level approach (TAGS)
 pull-certs:
 	$(if $(FQDN),,$(error FQDN must be set))
 	ansible-playbook \
@@ -40,6 +43,9 @@ pull-certs:
 		--vault-password-file ${VAULT_PASSWD_FILE} \
 		--extra-vars server_fqdn=${FQDN} \
 		pullcerts.yml
+
+remove-installed-roles:
+	ansible-galaxy role remove --roles-path roles/ revproxy certupdate certspull
 
 update-certs:
 	@echo update-certs
