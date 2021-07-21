@@ -42,6 +42,7 @@ You may limit tasks based on one or more of the following tags as well, by addin
 * certupdate
 * java
 * jenkins
+* makekeypair
 * nginx
 
 ## TODOs:

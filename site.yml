@@ -16,6 +16,8 @@
       java_pkgs:
         - openjdk-11-jdk
     - role: jenkins
+    - role: make_keypair
+      target_user: jenkins
     - role: certupdate
       certs_local_prefix: roles/revproxy/files/certs
       certs_target_folder: /etc/ssl/nginx/certs

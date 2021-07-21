@@ -1,0 +1,16 @@
+---
+# this must be invoked *after* installing any package that auto-adds its executing user
+- name: create user keypair
+  ansible.builtin.user:
+    name: "{{ target_user }}"
+    state: present
+    force: no
+    generate_ssh_key: yes
+    ssh_key_type: rsa
+    ssh_key_bits: 4096
+    ssh_key_file: .ssh/id_rsa
+    ssh_key_passphrase: "{{ ssh_key_pass }}"
+  when: ssh_key_pass is defined
+  tags:
+    - makekeypair
+...

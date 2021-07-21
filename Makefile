@@ -8,6 +8,7 @@ VAULT_PASSWD_FILE := ~/.ssh/.vp
 # - certupdate
 # - java
 # - jenkins
+# - makekeypair
 # - nginx
 ifdef TAGS
 TAGOPT := --tags "$(TAGS)"
