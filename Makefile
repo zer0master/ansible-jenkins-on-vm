@@ -3,6 +3,12 @@
 
 VAULT_PASSWD_FILE := ~/.ssh/.vp
 
+# currently supported tags (if used, quote list with comma delimiters, no spaces):
+# - certspull
+# - certupdate
+# - java
+# - jenkins
+# - nginx
 ifdef TAGS
 TAGOPT := --tags "$(TAGS)"
 endif
@@ -13,7 +19,6 @@ endif
 	pull-certs \
 	setup-jenkins \
 	update-certs
-
 
 setup-jenkins: pull-certs
 	ansible-playbook $(TAGOPT) \
