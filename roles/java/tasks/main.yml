@@ -30,6 +30,8 @@
   shell: |
     grep -c "^JAVA_HOME=" /etc/environment || true
   register: test_java_home
+  tags:
+    - java
 
 - name: set JAVA_HOME
   ansible.builtin.lineinfile:

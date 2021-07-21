@@ -1,20 +1,43 @@
 # ansible-jenkins-on-vm
-Evolving setup of controller behind Nginx reverse proxy, using the following assumptions:
-* Ubuntu 20 VM (`jenkins-ctrl`) on VMWareESXi (might work on AWS EC2 as well, not tried yet)
-* separate host (`knowhere`) renewing certs via LetsEncrypt
+Evolving setup of a controller (and maybe agents later) behind Nginx reverse proxy.
 
-Since this is being used in my home lab, there are some references to hosts (`knowhere` and `jenkins-ctrl`) as well as a domain (`ld-projects.com`) that others will have to change. I may genericize that in an update soon.
+## Background
+I use the AWS DNS approach to certificate maintenance: Route 53 as the SOA, with the hosting service's records changed to match. The certs are stored under fqdn-named folders; localized assumptions need cleaning up.
 
-I use the AWS DNS approach to certificate maintenance myself: Route 53 as the SOA; my hosting service has its records changed to match. At present, user `tivan` stores the certs under `~/tivan/certs` by fqdn; that needs to be externalized.
+## Prerequisites
+The following assumptions are in play:
+* Ubuntu 20 VM (`jenkins-ctrl`) on VMWare ESXi (perhaps AWS EC2 as well: unverified as yet)
+* separate host renewing certs via LetsEncrypt
 
-You'll need to create the `vault` file for the following secrets, and locate the password for it in a secure location; I chose `~/.ssh/.vp` since my VBox VM doesn't permit any incoming connections. Content as follows:
+Create a `vault` file in your checkout for the following secrets, and locate the password for it in a secure location; I chose `~/.ssh/.vp` since my laptop VM disallows any incoming connections. Content as follows:
 ```
-ansible_become_pass: (remote ansible user password)
+ansible_become_pass: (remote sudo-enabled user password)
 ansible_ssh_pass: (same as ansible_become_pass)
 certhost_ssh_pass: (password for host renewing certs)
 ```
-TODOs:
-* cert update is a placeholder in the Makefile,; it already is part of the `certupdate` `copy certs to target` task, which should be broken out appropriately
+Another issue to consider is the occasional problem of a previously used target that's recreated, but the prior host ket remains in `$HOME/.ssh/known_hosts`, which fails the playbook with a message similar to:
+```
+{"msg": "Using a SSH password instead of a key is not possible because Host Key checking is enabled and sshpass does not support this.  Please add this host's fingerprint to your known_hosts file to manage this host."}
+```
+The tasks below can be used for a "first-contact" exception rather than setting `host_key_checking = False` in the relevant ansible config:
+```
+    - name: Check SSH known_hosts for {{ inventory_hostname }}
+      local_action: shell ssh-keygen -F {{ inventory_hostname }}
+      register: checkForKnownHostsEntry
+      failed_when: false
+      changed_when: false
+      ignore_errors: yes
+    - name: Add {{ inventory_hostname }} to SSH known hosts automatically
+      when: checkForKnownHostsEntry.rc == 1
+      changed_when: checkForKnownHostsEntry.rc == 1
+      set_fact:
+        ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
+```
+
+## TODOs:
+Timetable is indeterminate at present.
 * agent spinup may be addressed later once I get task tags better sorted out; the Makefile already allows it if a quoted comma-delimited form is supplied for TAGS (`--tags` is added if so).
 
-For the present, no warranty expressed or implied. ;)
+As this is used in my home lab, there are some references to hosts (`knowhere` and `jenkins-ctrl`) as well as a domain (`ld-projects.com`) that others will have to change. I may genericize that in an update soon.
+
+As always, no warranty expressed or implied. ;)

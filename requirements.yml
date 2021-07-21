@@ -1,4 +1,7 @@
 ---
+- name: certspull
+  src: git+https://github.com/zer0master/ansible-certspull-letsencrypt.git
+  scm: git
 - name: certupdate
   src: git+https://github.com/zer0master/ansible-certupdate-nginx.git
   scm: git

@@ -1,5 +1,7 @@
 *.swp
 .env
 vault
-roles/revproxy
+hosts.yml
+roles/certspull
 roles/certupdate
+roles/revproxy

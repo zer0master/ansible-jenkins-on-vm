@@ -4,5 +4,7 @@
   vars_files:
     - vault
   roles:
-    - certspull
+    - role: certspull
+      certs_remote_prefix: /home/tivan/certs
+      certs_local_prefix: roles/revproxy/files/certs
 ...
