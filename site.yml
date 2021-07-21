@@ -13,6 +13,8 @@
   # certupdate done before nginx install due to config dependence; should be refined though
   roles:
     - role: java
+      java_pkgs:
+        - openjdk-11-jdk
     - role: jenkins
     - role: certupdate
       certs_local_prefix: roles/revproxy/files/certs

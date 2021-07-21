@@ -6,8 +6,8 @@ I use the AWS DNS approach to certificate maintenance: Route 53 as the SOA, with
 
 ## Prerequisites
 The following assumptions are in play:
-* Ubuntu 20 VM (`jenkins-ctrl`) on VMWare ESXi (perhaps AWS EC2 as well: unverified as yet)
-* separate host renewing certs via LetsEncrypt
+* Ubuntu 20 (currently virtual) on VMWare ESXi; EC2 will probably work as well, but is unverified
+*  a separate host renews certs via LetsEncrypt
 
 Create a `vault` file in your checkout for the following secrets, and locate the password for it in a secure location; I chose `~/.ssh/.vp` since my laptop VM disallows any incoming connections. Content as follows:
 ```
@@ -34,10 +34,20 @@ The tasks below can be used for a "first-contact" exception rather than setting 
         ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
 ```
 
+## Usage
+Simply execute `make FQDN=(yours)`; this pulls in the other modular roles (certificate management and nginx setup), and assumes you've already got a signed certificate chain and passwordless private key pointed to by the `certs_remote_folder` variable.
+
+You may limit tasks based on one or more of the following tags as well, by adding `TAGS="name,..." to the make command line:
+* certspull
+* certupdate
+* java
+* jenkins
+* nginx
+
 ## TODOs:
-Timetable is indeterminate at present.
+The timetable for any of these remains indeterminate at present:
 * agent spinup may be addressed later once I get task tags better sorted out; the Makefile already allows it if a quoted comma-delimited form is supplied for TAGS (`--tags` is added if so).
 
-As this is used in my home lab, there are some references to hosts (`knowhere` and `jenkins-ctrl`) as well as a domain (`ld-projects.com`) that others will have to change. I may genericize that in an update soon.
+As this is used in my home lab, there might still be some cruft that needs tracking down; more when there is more.
 
 As always, no warranty expressed or implied. ;)
