@@ -2,6 +2,8 @@
 .env
 vault
 hosts.yml
+roles/make_keypair/files
+# roles below here come from Makefile's install-role-deps recipe
 roles/certspull
 roles/certupdate
 roles/revproxy

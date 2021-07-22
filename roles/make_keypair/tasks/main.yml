@@ -11,6 +11,17 @@
     ssh_key_file: .ssh/id_rsa
     ssh_key_passphrase: "{{ ssh_key_pass }}"
   when: ssh_key_pass is defined
+  # as mentioned in https://stackoverflow.com/questions/33343215/
+  register: target_user_info
+  tags:
+    - makekeypair
+
+- name: retrieve for later use
+  ansible.builtin.fetch:
+    src: "{{ target_user_info.home }}/.ssh/{{ item }}"
+    dest: "roles/make_keypair/files/{{ inventory_hostname_short }}/ssh/{{ item }}"
+    flat: yes
+  loop: "{{ keypair_files }}"
   tags:
     - makekeypair
 ...

@@ -3,6 +3,10 @@
   remote_user: root
   vars:
     ansible_become_pass: "{{ ansible_ssh_pass }}"
+    # can always override from command line, but would need changes in make keypair task
+    keypair_files:
+      - id_rsa
+      - id_rsa.pub
   vars_files:
     - vault
     # not included in repo for obvious reasons; define/encrypt ansible_ssh_{user,pass} here if used

@@ -2,6 +2,7 @@
 #
 
 VAULT_PASSWD_FILE := ~/.ssh/.vp
+INSTALLED_ROLES := $(shell grep name requirements.yml | cut -f3 -d\ )
 
 # currently supported tags (if used, quote list with comma delimiters, no spaces):
 # - certspull
@@ -21,16 +22,27 @@ endif
 	setup-jenkins \
 	update-certs
 
-jenkins-revproxy: install-role-deps pull-certs
+install-controller: install-role-deps pull-certs
 	ansible-playbook $(TAGOPT) \
 		-vv \
 		--inventory hosts.yml \
+		--limit controller \
+		--vault-password-file ${VAULT_PASSWD_FILE} \
+		site.yml
+
+install-agents: install-role-deps
+	ansible-playbook \
+		--tags "java,jenkins,makekeypair" \
+		-vv \
+		--inventory hosts.yml \
+		--limit agents \
 		--vault-password-file ${VAULT_PASSWD_FILE} \
 		site.yml
 
 # show available targets
 help:
 	@awk '/^[-a-z]+:/' Makefile | cut -f1 -d\  | sort
+	@echo "\nInstalled roles: ${INSTALLED_ROLES}"
 
 install-role-deps:
 	ansible-galaxy role install -vv --role-file requirements.yml --roles-path roles/
@@ -46,7 +58,7 @@ pull-certs:
 		pullcerts.yml
 
 remove-installed-roles:
-	ansible-galaxy role remove --roles-path roles/ revproxy certupdate certspull
+	ansible-galaxy role remove --roles-path roles/ ${INSTALLED_ROLES}
 
 update-certs:
 	@echo update-certs
