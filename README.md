@@ -53,6 +53,10 @@ The timetable for any of these remains indeterminate at present:
 * can the initial password be programmatically entered for the controller
 * controller public key should be copied to agents' .ssh/authorized_keys with correct ownership/permissions
 * aspects of the Jenkins CLI may be worth looking into (install plugins, add agents, etc.)
+* support additional per-agent package installations, such as
+  * [Terraform](https://releases.hashicorp.com/terraform/) (with optional determination of latest stable zipfile)
+  * [Node JS](https://github.com/nodesource/distributions/blob/master/README.md#debinstall)
+  * you get the idea...
 
 As this is used in my home lab, there might still be some cruft that needs tracking down; more when there is more.
 
