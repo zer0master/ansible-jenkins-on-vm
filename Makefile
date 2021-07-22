@@ -32,7 +32,7 @@ install-controller: install-role-deps pull-certs
 
 install-agents: install-role-deps
 	ansible-playbook \
-		--tags "java,jenkins,makekeypair" \
+		--tags "java,makekeypair" \
 		-vv \
 		--inventory hosts.yml \
 		--limit agents \
