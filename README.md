@@ -57,6 +57,12 @@ The timetable for any of these remains indeterminate at present:
   * [Terraform](https://releases.hashicorp.com/terraform/) (with optional determination of latest stable zipfile)
   * [Node JS](https://github.com/nodesource/distributions/blob/master/README.md#debinstall)
   * you get the idea...
+* investigate the (allegedly) more flexible approach of using containers for agents based in part on [jenkins/ssh-agent](https://hub.docker.com/r/jenkins/ssh-agent/)
+  * it seems that a Java version will be needed on the host as well as in the container
+  * it's also worth investigating how to host toolsets on the host rather than making containers specialized, though there may be advantages to each
+  * when providing mount points for files, the container must have an existing target, requiring use of `touch` in the image's build
+* the [distributed builds](https://wiki.jenkins.io/display/JENKINS/Distributed+builds) writeup is also a valuable reference
+* if a local dockerhub is used, then building specialized containers based on `jenkins/ssh-agent` is probably a worthwhile exercise; the simplest validation would be verifying tool versions can be displayed as a test job
 
 As this is used in my home lab, there might still be some cruft that needs tracking down; more when there is more.
 
