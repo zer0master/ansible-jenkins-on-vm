@@ -40,7 +40,7 @@ Simply execute `make FQDN=(yours)` to setup the controller; this pulls in the ot
 
 To setup one or more agents (assuming one or more running VMs), execute `make install-agents` with appropriate inventory.
 
-You may limit tasks based on one or more of the following tags as well, by adding `TAGS="name,..." to the make command line:
+You may limit tasks based on one or more of the following tags as well, by adding `TAGS="name,..."` to the make command line:
 * certspull
 * certupdate
 * java
@@ -50,19 +50,24 @@ You may limit tasks based on one or more of the following tags as well, by addin
 
 ## TODOs:
 The timetable for any of these remains indeterminate at present:
-* can the initial password be programmatically entered for the controller
-* controller public key should be copied to agents' .ssh/authorized_keys with correct ownership/permissions
-* aspects of the Jenkins CLI may be worth looking into (install plugins, add agents, etc.)
-* support additional per-agent package installations, such as
+* add the following packages:
+  * `net-tools`
+  * `unzip`
+  * `dos2unix`
+  * `git`
+* can the initial password be programmatically entered for the controller?
+* the controller public key should be copied to agents' `.ssh/authorized_keys` with correct ownership/permissions
+* aspects of the Jenkins CLI should be investigated (install plugins, add agents, etc.)
+* look into supporting additional per-agent package installations, such as
   * [Terraform](https://releases.hashicorp.com/terraform/) (with optional determination of latest stable zipfile)
   * [Node JS](https://github.com/nodesource/distributions/blob/master/README.md#debinstall)
-  * you get the idea...
+  * etc.
 * investigate the (allegedly) more flexible approach of using containers for agents based in part on [jenkins/ssh-agent](https://hub.docker.com/r/jenkins/ssh-agent/)
-  * it seems that a Java version will be needed on the host as well as in the container
-  * it's also worth investigating how to host toolsets on the host rather than making containers specialized, though there may be advantages to each
-  * when providing mount points for files, the container must have an existing target, requiring use of `touch` in the image's build
+  * it seems that a Java version might be needed on the host as well as in the container
+  * investigate how to host toolsets on the host rather than making containers specialized, though there may be advantages to each; `rsync` has possibilities in that regard (and possibly a separate jenkins network for the VMs)
+  * if specialized containers are built, the container must have an existing target when providing mount points for files; this requires the use of `touch` in the image's build
 * the [distributed builds](https://wiki.jenkins.io/display/JENKINS/Distributed+builds) writeup is also a valuable reference
-* if a local dockerhub is used, then building specialized containers based on `jenkins/ssh-agent` is probably a worthwhile exercise; the simplest validation would be verifying tool versions can be displayed as a test job
+* if a local dockerhub is used, building specialized containers based on `jenkins/ssh-agent` is probably worthwhile; the simplest validation would be verifying tool versions can be displayed as a test job
 
 As this is used in my home lab, there might still be some cruft that needs tracking down; more when there is more.
 
